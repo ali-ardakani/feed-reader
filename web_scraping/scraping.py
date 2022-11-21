@@ -37,6 +37,9 @@ class RSSScraper(ABC):
     def scrape(self, limit: int) -> List[Dict]:
         """
         Abstract method for scraping
+        
+        :param limit: Number of posts to scrape(default: all)
+        :return: List of posts (must include author_name, title, link)
         """
         pass
 

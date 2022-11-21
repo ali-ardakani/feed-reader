@@ -32,8 +32,6 @@ class RedditScraper(RSSScraper):
             posts.append({
                 "author_name":
                 author.find("name").text.replace("/u/", ""),
-                "author_uri":
-                author.find("uri").text,
                 "title":
                 item.find("title").text,
                 "link":
