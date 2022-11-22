@@ -18,7 +18,6 @@ class RedditScraper(RSSScraper):
         :return: List of posts
         """
         posts = []
-
         soup = BeautifulSoup(self.content, "xml")
 
         items = soup.find_all("entry")
@@ -30,12 +29,11 @@ class RedditScraper(RSSScraper):
             author = item.find("author")
 
             posts.append({
-                "author_name":
-                author.find("name").text.replace("/u/", ""),
-                "title":
-                item.find("title").text,
-                "link":
-                item.find("link")["href"],
+                "author": author.find("name").text.replace("/u/", ""),
+                "title": item.find("title").text,
+                "link": item.find("link")["href"],
+                "published": item.find("published").text,
+                "updated": item.find("updated").text,
             })
 
         return posts

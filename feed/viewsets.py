@@ -6,7 +6,7 @@ from .models import Feed
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .tasks import update_feed
+# from .tasks import update_feed
 
 class FeedViewSet(viewsets.ViewSet):
     
@@ -30,9 +30,9 @@ class FeedViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self, request, pk=None):
-        res = update_feed.delay(pk, request.user.id, request.data["title"])
-        return Response(status=status.HTTP_202_ACCEPTED)
+    # def update(self, request, pk=None):
+    #     res = update_feed.delay(pk, request.user.id, request.data["title"])
+    #     return Response(status=status.HTTP_202_ACCEPTED)
 
     def destroy(self, request, pk=None):
         feed = Feed.objects.filter(pk=pk)

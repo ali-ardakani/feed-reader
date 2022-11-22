@@ -3,6 +3,19 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.contrib.auth.models import User
 
+class Source(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    url = models.URLField(unique=True)
+    def __str__(self):
+        return self.name
+    
+class Category(models.Model):
+    users = models.ManyToManyField(User, related_name="categories", blank=True, null=True)
+    source = models.ManyToManyField(Source, related_name="categories")
+    name = models.CharField(max_length=255, unique=True)
+    
+    def __str__(self):
+        return self.name
 
 class Bookmark(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -31,8 +44,12 @@ class AbilityToBookmark(models.Model):
 
 
 class Feed(AbilityToBookmark):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-
+    author = models.CharField(max_length=255, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    link = models.URLField(unique=True)
+    published = models.DateTimeField(null=True, blank=True)
+    updated = models.DateTimeField(null=True, blank=True)
+    categories = models.ManyToManyField(Category, related_name="feeds")
+    
     def __str__(self):
         return self.title

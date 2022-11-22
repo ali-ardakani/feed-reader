@@ -4,13 +4,23 @@ from .reddit import RedditScraper
 
 class ScraperFactory:
 
+    SOURCES = [
+        {
+            "name": "Reddit",
+            "url": "https://www.reddit.com/r/{category}/.rss",
+            "scraper": RedditScraper,
+        },
+    ]
+
     @staticmethod
-    def create_scraper(url: str, category: str) -> RSSScraper:
+    def createScraper(url: str, category: str) -> RSSScraper:
         """
         Create a scraper based on the url
+        
+        :param url: Url of the website
+        :param category: Category of the website
+        :return: Scraper
         """
-        if "reddit.com" in url:
-            url = f"{url}/r/{category}/.rss"
-            return RedditScraper(url)
-        else:
-            raise NotImplementedError("Scraper not implemented")
+        for source in ScraperFactory.SOURCES:
+            if url == source["url"]:
+                return source["scraper"](url.format(category=category))

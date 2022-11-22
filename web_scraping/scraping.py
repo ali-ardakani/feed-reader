@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Dict, List
 
 import requests
-from bs4 import BeautifulSoup
 
 
 class Request:
@@ -39,7 +38,6 @@ class RSSScraper(ABC):
         Abstract method for scraping
         
         :param limit: Number of posts to scrape(default: all)
-        :return: List of posts (must include author_name, title, link)
+        :return: List of posts (must include author, title, link, published, updated)
         """
         pass
-
