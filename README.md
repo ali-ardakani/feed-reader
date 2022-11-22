@@ -102,7 +102,7 @@ curl --location --request POST 'http://localhost:8000/api/user/login/' \
 
 ```bash
 curl --location --request POST 'http://localhost:8000/api/feed/create/' \
---header 'Authorization: Token e48a46ef000666a6e6ec88576fbb04c95e70c5b5' \
+--header 'Authorization: Token 1d784e5f084bdcb39e228dc5a1c319d0c510e0f0' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "title": "Test Feed"
@@ -121,7 +121,7 @@ curl --location --request POST 'http://localhost:8000/api/feed/create/' \
 
 ```bash
 curl --location --request GET 'http://localhost:8000/api/feed/' \
---header 'Authorization: Token e48a46ef000666a6e6ec88576fbb04c95e70c5b5'
+--header 'Authorization: Token 1d784e5f084bdcb39e228dc5a1c319d0c510e0f0'
 ```
 
 <!-- Response -->
