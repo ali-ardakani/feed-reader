@@ -11,15 +11,21 @@ class Source(models.Model):
 
     def __str__(self):
         return self.name
+    
+class CategoryName(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    
+    def __str__(self):
+        return self.name
 
 
 class Category(models.Model):
-    users = models.ManyToManyField(User, related_name="categories", blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     source = models.ManyToManyField(Source, related_name="categories")
-    name = models.CharField(max_length=255, unique=True)
+    name = models.ForeignKey(CategoryName, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.name.name
 
 
 class Bookmark(models.Model):

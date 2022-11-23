@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category, Feed, Source
+from .models import Category, Feed, Source, CategoryName
 
 
 class SourceSerializer(serializers.PrimaryKeyRelatedField,
@@ -24,7 +24,13 @@ class CategorySerializer(serializers.ModelSerializer):
         sources = validated_data.pop('source')
         if not sources:
             raise serializers.ValidationError('No sources provided')
-        category, created = Category.objects.get_or_create(**validated_data)
+
+        categoryName = CategoryName.objects.get_or_create(
+            name=validated_data['name'])[0]
+        category, created = Category.objects.get_or_create(
+            user = self.context['request'].user,
+            name = categoryName,
+        )
         category.source.set(sources)
         return category
 
@@ -39,7 +45,7 @@ class FeedSerializer(serializers.ModelSerializer):
                   'categories', 'bookmarked')
 
     def get_categories(self, obj):
-        return obj.categories.values_list('name', flat=True)
+        return obj.categories.values_list('name__name', flat=True)
 
     def get_bookmarked(self, obj):
         return obj.bookmarks.filter(

@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 
 from web_scraping.reddit import RedditScraper
 
-from .models import Category, Feed, Source
+from .models import Category, Feed, Source, CategoryName
 from .tasks import updateFeed
 
 
@@ -20,11 +20,17 @@ class FeedTestCase(APITestCase):
                                               password="testpassword2")
         self.source = Source.objects.create(
             name="Reddit", url="https://www.reddit.com/r/{category}/.rss")
-        self.category1 = Category.objects.create(name="category1")
-        self.category1.users.add(self.user)
+        categoryName1 = CategoryName.objects.create(name="category1")
+        categoryName2 = CategoryName.objects.create(name="category2")
+        self.category1 = Category.objects.create(
+            name=categoryName1,
+            user=self.user,
+            )
         self.category1.source.add(self.source)
-        self.category2 = Category.objects.create(name="category2")
-        self.category2.users.add(self.user2)
+        self.category2 = Category.objects.create(
+            name=categoryName2,
+            user=self.user2,
+            )
         self.category2.source.add(self.source)
         self.feed1 = Feed.objects.create(
             author="test",
