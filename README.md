@@ -19,7 +19,8 @@
 <!-- About: -->
 <div align="left">
 <h2 id="about">About</h2>
-<p>Feed Reader is a simple RSS reader. It is a simple project made using Django and Django Rest Framework.</p></br>
+<p>Feed Reader is a simple RSS scraper that allows you to view the latest news from your favorite websites.
+After you add a category and a website, you can view and manage your feeds.</p>
 <p>The technologies used in this project are:</p>
 <ul>
 <li>Django</li>
@@ -90,7 +91,7 @@ curl --location --request POST 'http://localhost:8000/api/user/login/' \
 
 ```json
 {
-  "token": "e48a46ef000666a6e6ec88576fbb04c95e70c5b5",
+  "token": "your-token",
   "username": "test",
   "email": "test@test.com"
 }
@@ -98,88 +99,92 @@ curl --location --request POST 'http://localhost:8000/api/user/login/' \
 
 </p>
 <p>
-<h4>Create Feed</h4>
+<h4>Create Category</h4>
 
 ```bash
-curl --location --request POST 'http://localhost:8000/api/feed/create/' \
---header 'Authorization: Token 1d784e5f084bdcb39e228dc5a1c319d0c510e0f0' \
+curl --location --request POST 'http://localhost:8000/api/category/create/' \
+--header 'Authorization: Token your-token' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "title": "Test Feed"
+    "name": "Technology",
+    "source": [1]
 }'
 ```
 
 <!-- Response -->
 
 ```json
-{ "user": "test", "title": "Test Feed", "bookmarked": false }
+{"name":"Technology","source":[1]}
 ```
 
 </p>
 
+<h4>Category List</h4>
+
+```bash
+curl --location --request GET 'http://localhost:8000/api/category/list/' \
+--header 'Authorization: Token your-token'
+```
+
+```json
+{"count":1,"next":null,"previous":null,"results":[{"name":"Technology","source":[1]}]}
+```
+
+<h4>Get Category</h4>
+
+```bash
+curl --location --request GET 'http://localhost:8000/api/category/1/' \
+--header 'Authorization: Token your-token'
+```
+
+```json
+{"name":"Technology","source":[1]}
+```
+
+
 <h4>Get Feeds</h4>
 
 ```bash
-curl --location --request GET 'http://localhost:8000/api/feed/' \
---header 'Authorization: Token 1d784e5f084bdcb39e228dc5a1c319d0c510e0f0'
+curl --location --request GET 'http://localhost:8000/api/feed/list/' \
+--header 'Authorization: Token your-token'
 ```
 
 <!-- Response -->
 
 ```json
-[{ "user": "test", "title": "Test Feed", "bookmarked": false }]
+{"count":1,"next":null,"previous":null,"results":[{"author":"test","title":"test","link":"test.com","published":"2022-05-15T17:29:35Z","updated":"2022-05-15T17:29:35Z","categories":["Technology"],"bookmarked":false}]}
 ```
+<p>You can also set the <code>bookmark</code> parameter to <code>true</code> to get only the bookmarked feeds.and set the <code>category</code> parameter to get feeds from a specific category.</p>
+example:
 
+```bash
+curl --location --request GET 'http://localhost:8000/api/feed/list/?bookmark=false&category=Technology' \
+--header 'Authorization: Token your-token'
+```
+ 
 </p>
 
 <h4>Get Feed</h4>
 
 ```bash
 curl --location --request GET 'http://localhost:8000/api/feed/1/' \
---header 'Authorization: Token e48a46ef000666a6e6ec88576fbb04c95e70c5b5'
+--header 'Authorization: Token your-token'
 ```
 
 ```json
-{ "user": "test", "title": "Test Feed", "bookmarked": false }
+{"author":"test","title":"test","link":"test.com","published":"2022-05-15T17:29:35Z","updated":"2022-05-15T17:29:35Z","categories":["test"],"bookmarked":false}
 ```
-</p>
-<h4>Update Feed</h4>
-
-```bash
-curl --location --request PUT 'http://localhost:8000/api/feed/1/' \
---header 'Authorization: Token e48a46ef000666a6e6ec88576fbb04c95e70c5b5' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "title": "Test Feed Updated"
-}'
-```
-
-Note: The update is done in async using celery. The feed will be updated after a few seconds.
-
-</p>
-
-<h4>Delete Feed</h4>
-
-```bash
-curl --location --request DELETE 'http://localhost:8000/api/feed/1/' \
---header 'Authorization: Token e48a46ef000666a6e6ec88576fbb04c95e70c5b5'
-```
-
-```json
-{ "user": "test", "title": "Test Feed", "bookmarked": false }
-```
-
 </p>
 
 <h4>Bookmark Feed</h4>
 
 ```bash
 curl --location --request POST 'http://localhost:8000/api/feed/1/bookmark/' \
---header 'Authorization: Token e48a46ef000666a6e6ec88576fbb04c95e70c5b5'
+--header 'Authorization: Token your-token'
 ```
 
 ```json
-{ "user": "test", "title": "Test Feed", "bookmarked": true }
+{"author":"test","title":"test","link":"test.com","published":"2022-05-15T17:29:35Z","updated":"2022-05-15T17:29:35Z","categories":["Technology"],"bookmarked":true}
 ```
  
 </p>
@@ -187,11 +192,11 @@ curl --location --request POST 'http://localhost:8000/api/feed/1/bookmark/' \
 
 ```bash
 curl --location --request POST 'http://localhost:8000/api/feed/1/bookmark/' \
---header 'Authorization: Token e48a46ef000666a6e6ec88576fbb04c95e70c5b5'
+--header 'Authorization: Token your-token'
 ```
 
 ```json
-{ "user": "test", "title": "Test Feed", "bookmarked": false }
+{"author":"test","title":"test","link":"test.com","published":"2022-05-15T17:29:35Z","updated":"2022-05-15T17:29:35Z","categories":["Technology"],"bookmarked":false}
 ```
 
 </p>
